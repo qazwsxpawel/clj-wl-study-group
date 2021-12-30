@@ -192,3 +192,31 @@
 (remove-nil-vals (weval `(~(interpreter "Paris") "Association")))
 
 (weval '(Dot [1 2 3] [4 5 6]))
+
+
+;; **** Entity
+
+;; https://reference.wolfram.com/language/ref/Entity.html
+;; https://reference.wolfram.com/language/ref/EntityValue.html
+
+;; valid
+(EntityValue (EntityValue (EntityClass "Country" "Europe")))
+;; vs invalid
+(EntityValue (EntityClass "xxxCountry" "Europe"))
+
+;; properties
+(EntityProperties (EntityValue (EntityClass "Country" "Europe")))
+
+(EntityValue (Entity "Country", "UnitedStates") "PopulationDensity")
+(EntityValue (Entity "Country", "UnitedStates") ["Population" "PopulationDensity"])
+(EntityValue (Entity "Country", "UnitedStates") "Association")
+
+(EntityList (EntityClass "Country" "Europe"))
+(EntityValue (EntityClass "Country" "Europe") ["Name" "PopulationDensity"] "PropertyAssociation")
+
+(RandomEntity "Country")
+
+;; Instance
+
+(wl/eval '(EntityValue (EntityInstance (Entity "Country" "Ireland") (-> "Date" 1950)) "Population"))
+(wl/eval '(EntityValue (Entity "Country" "Ireland") "Population"))
