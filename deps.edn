@@ -1,0 +1,17 @@
+{:paths ["examples" "resources"]
+ :aliases
+ {:dev {:extra-paths ["dev" "test"]
+        :jvm-opts ["-Djdk.attach.allowAttachSelf" ]
+        :extra-deps {com.clojure-goes-fast/clj-memory-meter {:mvn/version "0.1.3"}
+                     cider/orchard {:mvn/version "0.7.3"}
+                     djblue/portal {:mvn/version "0.19.2"}
+                     reagent/reagent {:mvn/version "1.1.0"}
+                     aerial.hanami/aerial.hanami {:mvn/version "0.15.1"}
+                     io.github.nextjournal/clerk {:mvn/version "0.3.233"}
+                     borkdude/edamame {:mvn/version "0.0.19"}
+                     clj-http/clj-http {:mvn/version "3.11.0"}}}
+  :dec2021 {:deps {io.github.nextjournal/clerk {:mvn/version "0.3.233"}
+                   scicloj/Clojuratica
+                   {:git/url "https://github.com/scicloj/Clojuratica"
+                    :sha     "0e81b99d64104d5752abbb30736fc2201e73c91a"}}
+            :extra-paths ["dec2021"]}}}

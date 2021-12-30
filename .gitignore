@@ -1,0 +1,18 @@
+# base
+
+target/
+.lein-*
+hs*.log
+*~
+.nrepl-port
+.#*
+
+# caches
+
+/.clj-kondo/.cache/
+.cpcache
+.cache
+
+# MacOS
+
+.DS_Store
