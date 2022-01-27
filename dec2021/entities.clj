@@ -10,6 +10,7 @@
    [clojuratica.base.express :as express]
    [portal.api :as portal]
    [clojuratica.tools.portal :as p]
+   [clojuratica.tools.clerk-helper :as c]
    [clojure.string :as str]))
 
 ;; * Entities
@@ -19,7 +20,6 @@
 ;; check, check...
 (wl/eval '(Map (fn [x] (+ x 1)) [1 2 3]))
 (wl/load-all-symbols 'entities)
-
 
 ;; *** Portal
 
@@ -66,6 +66,8 @@
 (def wa-q "miami zip codes")
 (def wa-zip (WolframAlpha wa-q))
 
+wa-zip
+
 ;; (tap> (WolframAlpha wa-q [["Input", 1] "ComputableData"]))
 
 (defn wa-comp-data [wa-q & {:keys [key-fn val-fn]
@@ -96,8 +98,8 @@
                (rest data))))))
 
 (defmethod parse/custom-parse 'Quantity [expr opts]
-  (pr-str (conj (map parse/parse (.args expr) opts) 'Quantity)) ;; this is OK for display, not so much for computation
-  #_(let [[n q] (map parse/parse (.args expr) opts)]
+  #_(pr-str (conj (map parse/parse (.args expr) opts) 'Quantity))
+  (let [[n q] (map parse/parse (.args expr) opts)]
       (with-meta [:div.Quantity n q]
         {:portal.viewer/default :portal.viewer/hiccup})))
 
@@ -163,6 +165,8 @@
 
 (def ents (EntityValue))
 
+(tap> ents)
+
 ;; List all entites for a given entity kind
 
 (def zips (Short (EntityList "ZIPCode")))
@@ -177,9 +181,11 @@
 (interpreter "Caffeine molecule")
 (interpreter "NYC ZIP Codes")
 
-(wl/eval '((Entity "City" ["Paris" "IleDeFrance" "France"]) "Properties"))
+(map last (wl/eval '((Entity "City" ["Paris" "IleDeFrance" "France"]) "Properties")))
+
 (wl/eval `(~(interpreter "Paris") "Properties"))
-(wl/eval '((Entity "City" ["Paris" "IleDeFrance" "France"]) "PopulationDensity"))
+
+(wl/eval '((Entity "City" ["Paris" "IleDeFrance" "France"]) "AirportCodes"))
 
 (defn remove-nil-vals [m]
   (reduce-kv (fn [m k v]
@@ -207,16 +213,34 @@
 ;; properties
 (EntityProperties (EntityValue (EntityClass "Country" "Europe")))
 
+(EntityValue (Entity "Country", "UnitedStates") "Population")
+(EntityValue (Entity "Country", "UnedStates") "Population")
+
+(EntityValue (EntityClass "Country" "Europe") "Population")
+
 (EntityValue (Entity "Country", "UnitedStates") "PopulationDensity")
+
 (EntityValue (Entity "Country", "UnitedStates") ["Population" "PopulationDensity"])
-(EntityValue (Entity "Country", "UnitedStates") "Association")
+
+(def us (wl/eval '(EntityValue (Entity "Country", "UnitedStates") "Association")
+                 {:parse/custom-parse-symbols ['Missing]}))
+
+(defmethod parse/custom-parse 'Missing [expr opts]
+  nil)
+
+(reduce-kv (fn [m k v] (assoc m (last k) v)) {} us)
+
+(into {} (take 5 us))
 
 (EntityList (EntityClass "Country" "Europe"))
 (EntityValue (EntityClass "Country" "Europe") ["Name" "PopulationDensity"] "PropertyAssociation")
 
 (RandomEntity "Country")
 
+(Missing "Not Found" [])
+
+
 ;; Instance
 
 (wl/eval '(EntityValue (EntityInstance (Entity "Country" "Ireland") (-> "Date" 1950)) "Population"))
-(wl/eval '(EntityValue (Entity "Country" "Ireland") "Population"))
+(wl/eval '(EntityValue (Entity "Country" "Ireland") "Population") )
