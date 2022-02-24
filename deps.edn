@@ -19,4 +19,9 @@
                    scicloj/Clojuratica
                    {:git/url "https://github.com/scicloj/Clojuratica"
                     :sha     "0e81b99d64104d5752abbb30736fc2201e73c91a"}}
-            :extra-paths ["jan2022"]}}}
+            :extra-paths ["jan2022"]}
+  :feb2022 {:deps {io.github.nextjournal/clerk {:mvn/version "0.3.233"}
+                   scicloj/Clojuratica
+                   {:git/url "https://github.com/scicloj/Clojuratica"
+                    :sha     "e2f6fbc62a3146781a9837f5567f1d38ba8b80a0"}}
+            :extra-paths ["feb2022"]}}}
